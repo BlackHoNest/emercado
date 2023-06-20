@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Seller extends Model
 {
-    use HasFactory;
 
     protected $table = "sellers";
     protected $fillable = [
@@ -35,4 +34,16 @@ class Seller extends Model
     protected $hidden = [
         'password',
     ];
+
+    public function Province() {
+        return $this->hasOne(Province::class, 'provCode', 'province');
+    }
+
+    public function Municipality() {
+        return $this->hasOne(Municipality::class, 'citymunCode', 'municipality');
+    }
+
+    public function Barangay() {
+        return $this->hasOne(Barangay::class, 'brgyCode', 'barangay');
+    }
 }

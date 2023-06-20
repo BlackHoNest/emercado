@@ -28,13 +28,7 @@ class GlobalList extends Controller
 		if (!empty($id )){
 			$out = FarmTypeSub::where("farmtypeid", $id)->orderby("description", "ASC")->get();
 		}
-
-		// if (!empty($tmps)){
-		// 	$i = explode("|", $tmps);
-		// 	$id = $i[1];
-		// 	$out = FarmTypeSub::where("farmtypeid", $id)->orderby("description", "ASC")->get();
-		// }
-
+		
 		if ($request->ajax()){
 			$tmp = [];
 			foreach($out as $o){

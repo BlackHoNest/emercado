@@ -5,7 +5,14 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\GlobalList;
-
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\ImageController;
+use App\Http\Controllers\BuyerController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CancelController;
+use App\Http\Controllers\ShareController;
 use App\Http\Controllers\Security\RolePermission;
 use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\Security\PermissionController;
@@ -31,10 +38,14 @@ Route::get('/storage', function () {
     Artisan::call('storage:link');
 });
 
+//sharing link
+Route::group(['prefix' => 'share'], function() {
+    Route::get('product/{id}', [ShareController::class, 'product'])->name('share.product');
+});
 
 //UI Pages Routs
-Route::get('/', [HomeController::class, 'guest']);
-
+Route::get('/', [HomeController::class, 'guest'])->name('guesthome');
+Route::post('/modal-login', [AuthenticatedSessionController::class, 'modallogin']);
 //registration
 Route::group(['prefix' => 'register'], function() {
     Route::get('buyer', [GuestController::class, 'buyer'])->name('buyer.signup');
@@ -43,6 +54,9 @@ Route::group(['prefix' => 'register'], function() {
     
 });
 
+Route::group(['prefix' => 'view'], function() {
+    Route::get('product/{id}', [GuestController::class, 'view'])->name('public.view');
+});
 
 //Lists
 Route::group(['prefix' => 'list'], function() {
@@ -60,21 +74,63 @@ Route::group(['prefix' => 'auth'], function() {
     Route::get('userprivacysetting', [HomeController::class, 'userprivacysetting'])->name('auth.userprivacysetting');
 });
 
+Route::group(['prefix' => 'post','middleware' => ['auth','authseller']], function () {
+    Route::get('/', [PostController::class, 'index'])->name('post.index');
+    Route::get('/create', [PostController::class, 'create'])->name('post.create');
+    Route::post('/store', [PostController::class, 'store'])->name('post.store');
+    Route::get('/drafts', [PostController::class, 'drafts'])->name('post.drafts');
+    Route::post('/publish', [PostController::class, 'publish'])->name('post.publish');
+    Route::post('/unpublish', [PostController::class, 'unpublish'])->name('post.unpublish');
+    Route::post('/favorite', [PostController::class, 'favorite'])->name('post.favorite');
+    // Route::post('/remove-file', [MOUController::class, 'removefile']);
+});
 
 
+Route::group(['prefix' => 'post','middleware' => ['auth','authbuyer']], function () {
+    Route::post('/favorite', [PostController::class, 'favorite'])->name('post.favorite');
+    // Route::post('/remove-file', [MOUController::class, 'removefile']);
+});
+
+
+Route::group(['prefix' => 'image','middleware' => ['auth','authseller']], function () {
+    Route::post('/store', [ImageController::class, 'store'])->name('image.store');
+    // Route::post('/remove-file', [MOUController::class, 'removefile']);
+});
+
+Route::group(['prefix' => 'buyer','middleware' => ['auth','authbuyer']], function () {
+    Route::post('/addtocart', [BuyerController::class, 'cart'])->name('buyer.cart');
+    // Route::post('/remove-file', [MOUController::class, 'removefile']);
+});
+
+Route::group(['prefix' => 'cart','middleware' => ['auth','authbuyer']], function () {
+    Route::post('/add', [CartController::class, 'add'])->name('cart.add');
+    Route::get('/view', [CartController::class, 'view'])->name('cart.view');
+    Route::post('/remove', [CartController::class, 'remove'])->name('cart.remove');
+});
+
+Route::group(['prefix' => 'order','middleware' => ['auth']], function () {
+    Route::get('/list', [OrderController::class, 'list'])->name('order.list')->middleware('authseller');
+    Route::get('/place', [OrderController::class, 'place'])->name('order.place')->middleware('authbuyer');
+    Route::get('/view', [OrderController::class, 'view'])->name('order.view')->middleware('authbuyer');
+    Route::post('/cancel', [OrderController::class, 'cancel'])->name('order.cancel');
+    Route::post('/cancelseller', [OrderController::class, 'cancelseller'])->name('order.cancelseller');
+    Route::post('/confirm', [OrderController::class, 'confirm'])->name('order.confirm');
+    Route::get('/myconfirm', [OrderController::class, 'confirmed'])->name('order.myconfirm')->middleware('authbuyer');
+});
+
+Route::group(['prefix' => 'cancel','middleware' => ['auth']], function () {
+    Route::get('/buyer', [CancelController::class, 'buyer'])->name('cancel.buyer')->middleware('authbuyer');
+   
+});
 
 Route::group(['middleware' => 'auth'], function () {
-    // Permission Module
-    Route::get('/role-permission',[RolePermission::class, 'index'])->name('role.permission.list');
-    Route::resource('permission',PermissionController::class);
-    Route::resource('role', RoleController::class);
-
     // Dashboard Routes
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
     // Users Module
     Route::resource('users', UserController::class);
 });
+
 
 //App Details Page => 'Dashboard'], function() {
 Route::group(['prefix' => 'menu-style'], function() {
@@ -86,31 +142,6 @@ Route::group(['prefix' => 'menu-style'], function() {
     Route::get('boxed-fancy', [HomeController::class, 'boxedfancy'])->name('menu-style.boxedfancy');
 });
 
-//App Details Page => 'special-pages'], function() {
-Route::group(['prefix' => 'special-pages'], function() {
-    //Example Page Routs
-    Route::get('billing', [HomeController::class, 'billing'])->name('special-pages.billing');
-    Route::get('calender', [HomeController::class, 'calender'])->name('special-pages.calender');
-    Route::get('kanban', [HomeController::class, 'kanban'])->name('special-pages.kanban');
-    Route::get('pricing', [HomeController::class, 'pricing'])->name('special-pages.pricing');
-    Route::get('rtl-support', [HomeController::class, 'rtlsupport'])->name('special-pages.rtlsupport');
-    Route::get('timeline', [HomeController::class, 'timeline'])->name('special-pages.timeline');
-});
-
-//Widget Routs
-Route::group(['prefix' => 'widget'], function() {
-    Route::get('widget-basic', [HomeController::class, 'widgetbasic'])->name('widget.widgetbasic');
-    Route::get('widget-chart', [HomeController::class, 'widgetchart'])->name('widget.widgetchart');
-    Route::get('widget-card', [HomeController::class, 'widgetcard'])->name('widget.widgetcard');
-});
-
-//Maps Routs
-Route::group(['prefix' => 'maps'], function() {
-    Route::get('google', [HomeController::class, 'google'])->name('maps.google');
-    Route::get('vector', [HomeController::class, 'vector'])->name('maps.vector');
-});
-
-
 //Error Page Route
 Route::group(['prefix' => 'errors'], function() {
     Route::get('error404', [HomeController::class, 'error404'])->name('errors.error404');
@@ -118,28 +149,3 @@ Route::group(['prefix' => 'errors'], function() {
     Route::get('maintenance', [HomeController::class, 'maintenance'])->name('errors.maintenance');
 });
 
-
-//Forms Pages Routs
-Route::group(['prefix' => 'forms'], function() {
-    Route::get('element', [HomeController::class, 'element'])->name('forms.element');
-    Route::get('wizard', [HomeController::class, 'wizard'])->name('forms.wizard');
-    Route::get('validation', [HomeController::class, 'validation'])->name('forms.validation');
-});
-
-
-//Table Page Routs
-Route::group(['prefix' => 'table'], function() {
-    Route::get('bootstraptable', [HomeController::class, 'bootstraptable'])->name('table.bootstraptable');
-    Route::get('datatable', [HomeController::class, 'datatable'])->name('table.datatable');
-});
-
-//Icons Page Routs
-Route::group(['prefix' => 'icons'], function() {
-    Route::get('solid', [HomeController::class, 'solid'])->name('icons.solid');
-    Route::get('outline', [HomeController::class, 'outline'])->name('icons.outline');
-    Route::get('dualtone', [HomeController::class, 'dualtone'])->name('icons.dualtone');
-    Route::get('colored', [HomeController::class, 'colored'])->name('icons.colored');
-});
-//Extra Page Routs
-Route::get('privacy-policy', [HomeController::class, 'privacypolicy'])->name('pages.privacy-policy');
-Route::get('terms-of-use', [HomeController::class, 'termsofuse'])->name('pages.term-of-use');

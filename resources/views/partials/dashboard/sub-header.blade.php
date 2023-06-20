@@ -1,5 +1,3 @@
-
-
 <div class="iq-navbar-header" style="height: 215px;">
     <div class="container-fluid iq-container">
         <div class="row">
@@ -14,6 +12,6 @@
         </div>
     </div>
     <div class="iq-header-img">
-        <img src="https://rare-gallery.com/uploads/posts/821945-Fruit-Vegetables-Tomatoes-Onion-Strawberry-Lemons.jpg" alt="header" class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
+        <img src="{{asset('images/emercado/guest-bg.jpg')}}" alt="header" class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
     </div>
 </div>

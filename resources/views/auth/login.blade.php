@@ -87,4 +87,4 @@
       </div>
    </section>
 </x-guest-layout>
-@extends('modals.register')
+

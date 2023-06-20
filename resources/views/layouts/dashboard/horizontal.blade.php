@@ -14,3 +14,6 @@
 @include('partials.dashboard._body2')
 </body>
 </html>
+@include('modals.register')
+@include('modals.login')
+@include('modals.share')

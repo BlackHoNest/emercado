@@ -15,3 +15,6 @@
 </body>
 
 </html>
+@include('modals.register')
+@include('modals.login')
+@include('modals.share')
