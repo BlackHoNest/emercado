@@ -30,6 +30,27 @@ class AuthenticatedSessionController extends Controller
      * @param  \App\Http\Requests\Auth\LoginRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
+
+    public function modallogin(Request $request){
+        $username = $request->username;
+        $password = $request->password;
+
+        if (empty($username))
+            return response()->json(['Error' => 1, 'Message' => 'Empty Username']);
+
+        if (empty($password))
+            return response()->json(['Error' => 1, 'Message' => 'Empty Password']);
+        
+        $credentials = ['username' => $username, 'password' => $password, 'user_type' => "buyer"];
+ 
+        if (Auth::attempt($credentials)) {
+            return response()->json(['Error' => 0]);
+        }
+
+        return response()->json(['Error' => 1, 'Message' => 'Invalid Username or Password']);
+    
+    }
+    
     public function store(LoginRequest $request)
     {
         $request->authenticate();

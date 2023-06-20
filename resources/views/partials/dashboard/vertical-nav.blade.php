@@ -1,10 +1,15 @@
 <ul class="navbar-nav iq-main-menu"  id="sidebar">
-    <li class="nav-item static-item">
-        <a class="nav-link static-item disabled" href="#" tabindex="-1">
-            <span class="default-icon">Home</span>
-            <span class="mini-icon">-</span>
+<li class="nav-item">
+        <a class="nav-link" aria-current="page" href="/">
+            <i class="icon">
+            <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">                            
+                <path d="M9.13478 20.7733V17.7156C9.13478 16.9351 9.77217 16.3023 10.5584 16.3023H13.4326C13.8102 16.3023 14.1723 16.4512 14.4393 16.7163C14.7063 16.9813 14.8563 17.3408 14.8563 17.7156V20.7733C14.8539 21.0978 14.9821 21.4099 15.2124 21.6402C15.4427 21.8705 15.7561 22 16.0829 22H18.0438C18.9596 22.0023 19.8388 21.6428 20.4872 21.0008C21.1356 20.3588 21.5 19.487 21.5 18.5778V9.86686C21.5 9.13246 21.1721 8.43584 20.6046 7.96467L13.934 2.67587C12.7737 1.74856 11.1111 1.7785 9.98539 2.74698L3.46701 7.96467C2.87274 8.42195 2.51755 9.12064 2.5 9.86686V18.5689C2.5 20.4639 4.04738 22 5.95617 22H7.87229C8.55123 22 9.103 21.4562 9.10792 20.7822L9.13478 20.7733Z" fill="currentColor"></path>                            
+            </svg>                        
+            </i>
+            <span class="item-name">Home</span>
         </a>
     </li>
+
     <li class="nav-item">
         <a class="nav-link {{activeRoute(route('dashboard'))}}" aria-current="page" href="{{route('dashboard')}}">
             <i class="icon">
@@ -16,6 +21,7 @@
             <span class="item-name">Dashboard</span>
         </a>
     </li>
+
     @if(Auth::user()->user_type == 'provincial')
         
         <li class="nav-item">
@@ -102,6 +108,160 @@
                 </i>
                 <span class="item-name">Farm Aids</span>
             </a>
+
+    <li><hr class="hr-horizontal"></li>
+
+    @if (auth()->check() && strtolower(auth()->user()->user_type) == "seller")
+        <li class="nav-item static-item">
+            <a class="nav-link static-item disabled" href="#" tabindex="-1">
+                <span class="default-icon">Control Panel</span>
+                <span class="mini-icon">-</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link " data-bs-toggle="collapse" href="#sidebar-post" role="button" aria-expanded="false" aria-controls="sidebar-fines">
+                <i class="fa fa-shopping-basket" style = "margin-top: 4px"></i>
+                <span class="item-name">Products</span>
+                <i class="right-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </i>
+            </a>
+            <ul class="sub-nav collapse" id="sidebar-post" data-bs-parent="#sidebar">
+                
+                <li class="nav-item">
+                    <a class="nav-link {{activeRoute(route('post.create'))}}" href="{{route('post.create')}}">
+                        <i class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                <g>
+                                <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                </g>
+                            </svg>
+                        </i>
+                        <i class="sidenav-mini-icon"> NA </i>
+                        <span class="item-name">New</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{activeRoute(route('post.index'))}}" href="{{route('post.index')}}">
+                        <i class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                <g>
+                                <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                </g>
+                            </svg>
+                        </i>
+                        <i class="sidenav-mini-icon"> MP </i>
+                        <span class="item-name">My Posts</span>
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link {{activeRoute(route('post.drafts'))}}" href="{{route('post.drafts')}}">
+                        <i class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                <g>
+                                <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                </g>
+                            </svg>
+                        </i>
+                        <i class="sidenav-mini-icon"> DR </i>
+                        <span class="item-name">Drafts</span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link " data-bs-toggle="collapse" href="#sidebar-order" role="button" aria-expanded="false" aria-controls="sidebar-order">
+                <i class="fa fa-shopping-cart" style = "margin-top: 4px"></i>
+                <span class="item-name">Orders</span>
+                <i class="right-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </i>
+            </a>
+            <ul class="sub-nav collapse" id="sidebar-order" data-bs-parent="#sidebar">
+
+                <li class="nav-item">
+                    <a class="nav-link {{activeRoute(route('order.list'))}}" href="{{route('order.list')}}">
+                        <i class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                <g>
+                                <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                </g>
+                            </svg>
+                        </i>
+                        <i class="sidenav-mini-icon"> LI </i>
+                        <span class="item-name">For Confirmation</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+    @else
+        <li class="nav-item">
+            <a class="nav-link " data-bs-toggle="collapse" href="#sidebar-order" role="button" aria-expanded="false" aria-controls="sidebar-order">
+                <i class="fa fa-shopping-cart" style = "margin-top: 4px"></i>
+                <span class="item-name">Orders</span>
+                <i class="right-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </i>
+            </a>
+            <ul class="sub-nav collapse" id="sidebar-order" data-bs-parent="#sidebar">
+
+                <li class="nav-item">
+                    <a class="nav-link {{activeRoute(route('order.view'))}}" href="{{route('order.view')}}">
+                        <i class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                <g>
+                                <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                </g>
+                            </svg>
+                        </i>
+                        <i class="sidenav-mini-icon"> MO </i>
+                        <span class="item-name">My Orders</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{activeRoute(route('order.myconfirm'))}}" href="{{route('order.myconfirm')}}">
+                        <i class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                <g>
+                                <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                </g>
+                            </svg>
+                        </i>
+                        <i class="sidenav-mini-icon"> CO </i>
+                        <span class="item-name">My Confirmed Orders</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{activeRoute(route('cancel.buyer'))}}" href="{{route('cancel.buyer')}}">
+                        <i class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                <g>
+                                <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                </g>
+                            </svg>
+                        </i>
+                        <i class="sidenav-mini-icon"> CO </i>
+                        <span class="item-name">My Cancellations</span>
+                    </a>
+                </li>
+
+            </ul>
+
         </li>
     @endif
 </ul>

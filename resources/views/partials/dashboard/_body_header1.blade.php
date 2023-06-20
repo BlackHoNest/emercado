@@ -63,7 +63,7 @@
               <div class="card-body p-0">
                 <a href="#" class="iq-sub-card">
                   <div class="d-flex align-items-center">
-                      <img class="avatar-40 rounded-pill bg-soft-primary p-1" src="{{asset('images/shapes/01.png')}}" alt="">
+                      
                       <div class="ms-3 w-100">
                         <h6 class="mb-0 ">Emma Watson Bni</h6>
                         <div class="d-flex justify-content-between align-items-center">

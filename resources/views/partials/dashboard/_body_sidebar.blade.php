@@ -1,6 +1,6 @@
 <aside class="sidebar sidebar-default navs-rounded-all">
     <div class="sidebar-header d-flex align-items-center justify-content-start">
-        <a href="{{route('dashboard')}}" class="navbar-brand">
+        <a href="/" class="navbar-brand">
             <img src="{{asset('e-mercado-logo.png')}}" style="width: 50px; height: 40px;" alt="">
             <h4 class="logo-title">{{env('APP_NAME')}}</h4>
         </a>

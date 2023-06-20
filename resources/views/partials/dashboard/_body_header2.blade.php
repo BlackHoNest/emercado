@@ -5,7 +5,7 @@
         <path fill="currentColor" d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"></path>
     </svg>
     </button>
-    <a href="{{route('dashboard')}}" class="navbar-brand col-md-2 col-lg-3">
+    <a href="/" class="navbar-brand col-md-2 col-lg-3">
       <svg width="30" class="text-primary" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor"/>
         <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor"/>
@@ -197,8 +197,16 @@
           <img src="{{asset('images/avatars/avtar_5.png')}}" alt="User-Profile" class="theme-color-yellow-img img-fluid avatar avatar-50 avatar-rounded">
           <img src="{{asset('images/avatars/avtar_3.png')}}" alt="User-Profile" class="theme-color-pink-img img-fluid avatar avatar-50 avatar-rounded">
             <div class="caption ms-3 ">
-                <h6 class="mb-0 caption-title">{{ auth()->user()->name ?? 'Austin Robertson'  }}</h6>
-                <p class="mb-0 caption-sub-title">Marketing Administrator</p>
+                <h6 class="mb-0 caption-title">
+               
+                    @if (auth()->check()){
+                      {{ auth()->user()->userProfile->first_name ?? 'Austin Robertson'  }}
+                    @else
+                      <a href = "{{route('auth.signin')}}">Signin</a>
+                    @endif
+                  
+                </h6>
+                <p class="mb-0 caption-sub-title">{{auth()->check()?auth()->user()->user_type:"Guest"}}</p>
             </div>
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">

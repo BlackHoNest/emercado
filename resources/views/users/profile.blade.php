@@ -303,7 +303,7 @@
                <div class="card-body">
                   <ul class="list-inline m-0 p-0">
                      <li class="d-flex mb-4 align-items-center">
-                        <img src="{{asset('images/avatars/01.png')}}" alt="story-img" class="rounded-pill avatar-40">
+                       
                         <div class="ms-3 flex-grow-1">
                            <h6>Paul Molive</h6>
                            <p class="mb-0">Web Designer</p>
