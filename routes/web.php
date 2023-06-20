@@ -112,7 +112,6 @@ Route::group(['prefix' => 'list'], function() {
 //Verify
 Route::group(['prefix' => 'verify'], function() {
     Route::post('/username',[VerifyController::class, 'verifyusername']);
-    Route::post('/password',[VerifyController::class, 'verifypassword']);
 
     Route::post('/approveseller',[VerifyController::class, 'approveseller'])->name('approve.seller');
 });
