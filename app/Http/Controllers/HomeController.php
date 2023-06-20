@@ -24,7 +24,6 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\LogController;
 
-use App\Models\FarmType;
 use App\Models\PostProduct;
 use App\Models\Order;
 
@@ -43,7 +42,10 @@ class HomeController extends Controller
     {
         $assets = ['chart', 'animation'];
         $uType = Auth::user()->user_type;
+        $cart = new CartController();
+        $ctr = $cart->badge();
 
+        $log = new LogController();
 
         if (strtolower($uType) == "provincial"){
             
@@ -72,16 +74,40 @@ class HomeController extends Controller
 
             return view('dashboards.admin', compact('assets', 'totalusers', 'totalverified', 'totalpending', 'totalbuyer', 'sellersbybrgy', 'totalsellerspending', 'totalsellersverified', 'recentlyverified'));
         }
-        elseif (strtolower($uType) == "seller")
-        {
-            return view('dashboards.seller', compact('assets'));
-        }
-        elseif (strtolower($uType) == "buyer")
-        {
+        elseif (strtolower($uType) == "seller"){
 
-        }
-        else
-        {
+            $posts = PostProduct::select('draft', DB::raw('count(draft) as countPost'))
+                ->where("SellerID", Auth::user()->account_id)
+                ->groupBy("draft")
+                ->get();
+
+            $orders = Order::select('orderstatus', DB::raw('count(orderstatus) as countOrder'))
+                ->where("SellerID", Auth::user()->account_id)
+                ->groupBy("orderstatus")
+                ->get();
+                
+            $top5 = Order::select('BuyerID', DB::raw('count(BuyerID) as countBuyer'))
+                ->where("SellerID", Auth::user()->account_id)
+                ->groupBy("BuyerID")
+                ->orderBy('countBuyer', 'DESC')
+                ->get();
+
+            
+            return view('dashboards.seller', compact('assets','posts','orders','top5'),[
+                'logs' => $log->show(5)
+            ]);
+
+        }elseif (strtolower($uType) == "buyer"){
+
+            $posteds = PostProduct::where("draft", 1)->orderBy('created_at', 'DESC')->paginate(10);
+
+            return view('dashboards.buyer', compact('assets','posteds'),[
+                'Badge' => $ctr,
+                'logs' => $log->show(5)
+            ]);
+
+        }else{
+
 
         }
     }
@@ -137,48 +163,8 @@ class HomeController extends Controller
         else {
 
             return view('errors.error404');
-
-        $cart = new CartController();
-        $ctr = $cart->badge();
-
-        $log = new LogController();
-
-        if (strtolower($uType) == "seller"){
-
-            $posts = PostProduct::select('draft', DB::raw('count(draft) as countPost'))
-                ->where("SellerID", Auth::user()->account_id)
-                ->groupBy("draft")
-                ->get();
-
-            $orders = Order::select('orderstatus', DB::raw('count(orderstatus) as countOrder'))
-                ->where("SellerID", Auth::user()->account_id)
-                ->groupBy("orderstatus")
-                ->get();
-                
-            $top5 = Order::select('BuyerID', DB::raw('count(BuyerID) as countBuyer'))
-                ->where("SellerID", Auth::user()->account_id)
-                ->groupBy("BuyerID")
-                ->orderBy('countBuyer', 'DESC')
-                ->get();
-
-            
-            return view('dashboards.seller', compact('assets','posts','orders','top5'),[
-                'logs' => $log->show(5)
-            ]);
-
-        }elseif (strtolower($uType) == "buyer"){
-
-            $posteds = PostProduct::where("draft", 1)->orderBy('created_at', 'DESC')->paginate(10);
-
-            return view('dashboards.buyer', compact('assets','posteds'),[
-                'Badge' => $ctr,
-                'logs' => $log->show(5)
-            ]);
-
-        }else{
-
-
         }
+        
 
     }
 
