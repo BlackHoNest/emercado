@@ -11,7 +11,6 @@ use App\Http\Controllers\DeleteController;
 use App\Http\Controllers\GlobalList;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ImageController;
-use App\Http\Controllers\BuyerController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\OrderController;
@@ -113,7 +112,6 @@ Route::group(['prefix' => 'list'], function() {
 //Verify
 Route::group(['prefix' => 'verify'], function() {
     Route::post('/username',[VerifyController::class, 'verifyusername']);
-    Route::post('/password',[VerifyController::class, 'verifypassword']);
 
     Route::post('/approveseller',[VerifyController::class, 'approveseller'])->name('approve.seller');
 });
