@@ -16,9 +16,6 @@ use App\Models\User;
 use App\Models\Buyer;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\AESCipher;
 use Illuminate\Support\Carbon;
 
 use App\Models\FarmType;
@@ -143,9 +140,6 @@ class BuyerController extends Controller
         event(new Registered($user));
 
         return redirect(RouteServiceProvider::HOME);
-
-    public function index(){
-
     }
 
     // wala pa ni diri na edit
