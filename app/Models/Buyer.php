@@ -9,13 +9,22 @@ class Buyer extends Model
 {
     use HasFactory;
 
+    protected $table = "Buyer";
+
+    public $timestamps = true;
+
     protected $fillable = [
+        'buyer_id',
         'last_name',
         'first_name',
-        'address',
         'contact_number',
-        'username',
-        'password',
+        'birth_date',
+        'gender',
+        'province',
+        'municipality',
+        'barangay',
+        'street',
+        'zipcode',
         'profile_picture'
     ];
 

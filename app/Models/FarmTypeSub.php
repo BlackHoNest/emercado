@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FarmTypeSub extends Model
 {
-    use softDeletes;
+    // use softDeletes;
 
     protected $table = "farmtype_sub";
 
     protected $fillable = [
-        'description',
+        'product_description',
         'remarks',
         'farmtypeid'
     ];

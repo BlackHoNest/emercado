@@ -4,8 +4,6 @@
          <div class="row row-cols-1">
             <div class="d-slider1 overflow-hidden ">
 
-            @if (auth()->user()->user_type == 'seller')
-
                <ul  class="swiper-wrapper list-inline m-0 p-0 mb-2">
                   <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="700">
                      <div class="card-body">
@@ -567,9 +565,8 @@
                   </div>
                </div>
 
-               @endif
-
-               @if (auth()->user()->user_type == 'buyer')
+             
+               
 
                <div class="col-md-12">
                   <div class="row">
@@ -842,7 +839,7 @@
                   </div>
                </div>
 
-               @endif
+               
 
             </div>
          </div>

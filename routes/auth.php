@@ -17,6 +17,13 @@ Route::post('/buyer', [BuyerController::class, 'store'])
 Route::post('/seller', [SellerController::class, 'store'])
                 ->middleware('guest')->name('register_seller');
 
+Route::get('/provincelogin', [AuthenticatedSessionController::class, 'create'])
+                ->middleware('guest')
+                ->name('provincelogin');
+
+Route::post('/provincelogin', [AuthenticatedSessionController::class, 'store'])
+                ->middleware('guest');
+
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
                 ->middleware('guest')
                 ->name('login');

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FarmType extends Model
 {
-    use softDeletes;
+    // use softDeletes;
 
     protected $table = "farmtype";
 

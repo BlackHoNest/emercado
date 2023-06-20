@@ -3,6 +3,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 <script src="https://kit.fontawesome.com/fcdde7325c.js" crossorigin="anonymous"></script>
+
 <!-- Favicon -->
 <link rel="shortcut icon" href="{{asset('images/favicon.ico')}}" />
 <link rel="stylesheet" href="{{asset('css/libs.min.css')}}">
