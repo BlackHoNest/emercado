@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AESCipher;
 use Illuminate\Auth\Events\Registered;
 use App\Providers\RouteServiceProvider;
+use App\Http\Controllers\CartController;
 
 use App\Http\Controllers\GlobalList;
 use App\Models\FarmType;
@@ -17,6 +18,7 @@ use App\Models\Aid;
 use App\Models\Seller;
 use App\Models\Farm;
 use App\Models\User;
+use App\Models\PostProduct;
 
 class GuestController extends Controller
 {
@@ -214,5 +216,20 @@ class GuestController extends Controller
 
     }
 
+    public function view(Request $request){
 
+        $cart = new CartController();
+        $ctr = $cart->badge();
+
+        $posted = PostProduct::where("slug_name", $request->id)->first();
+
+        if (empty($posted)){
+            return redirect()->route('errors.error404');
+        }
+
+        $categories = FarmType::orderBy("description", 'ASC')->get();
+        return view('guest.one', compact('categories','posted'),[
+            'Badge' => $ctr
+        ]);
+    }
 }

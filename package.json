@@ -11,6 +11,7 @@
         "production": "mix --production"
     },
     "dependencies": {
+        "@ckeditor/ckeditor5-alignment": "^38.0.1",
         "@popperjs/core": "^2.9.1",
         "apexcharts": "^3.27.1",
         "bootstrap": "^5.1.0",

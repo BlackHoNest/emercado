@@ -28,3 +28,5 @@
          @include('partials.dashboard._scripts')
     </body>
 </html>
+
+@include('modals.share')

@@ -1,6 +1,11 @@
+<?php
+    use App\Http\Controllers\CartController;
+    $cart = new CartController();
+?>
+
 <nav class="nav navbar navbar-expand-lg navbar-light iq-navbar">
   <div class="container-fluid navbar-inner">
-    <a href="{{route('dashboard')}}" class="navbar-brand">
+    <a href="/" class="navbar-brand">
       <img src="{{asset('e-mercado-logo.png')}}" style="width: 45px; height: 35px;" alt="">
       <h6 class="logo-title">{{env('APP_NAME')}}</h6>
     </a>
@@ -30,25 +35,24 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto  navbar-list mb-2 mb-lg-0">
-        <li class="nav-item dropdown">
-          <a href="#" class="search-toggle nav-link" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="{{asset('images/Flag/flag001.png')}}" class="img-fluid rounded-circle" alt="user" style="height: 30px; min-width: 30px; width: 30px;">
-            <span class="bg-primary"></span>
-          </a>
-          <div class="sub-drop dropdown-menu dropdown-menu-end p-0" aria-labelledby="dropdownMenuButton2">
-            <div class="card shadow-none m-0 border-0">
-              <div class=" p-0 ">
-                <ul class="list-group list-group-flush">
-                  <li class="iq-sub-card list-group-item"><a class="p-0" href="#"><img src="{{asset('images/Flag/flag-03.png')}}" alt="img-flaf" class="img-fluid me-2" style="width: 15px;height: 15px;min-width: 15px;"/>Spanish</a></li>
-                  <li class="iq-sub-card list-group-item"><a class="p-0" href="#"><img src="{{asset('images/Flag/flag-04.png')}}" alt="img-flaf" class="img-fluid me-2" style="width: 15px;height: 15px;min-width: 15px;"/>Italian</a></li>
-                  <li class="iq-sub-card list-group-item"><a class="p-0" href="#"><img src="{{asset('images/Flag/flag-02.png')}}" alt="img-flaf" class="img-fluid me-2" style="width: 15px;height: 15px;min-width: 15px;"/>French</a></li>
-                  <li class="iq-sub-card list-group-item"><a class="p-0" href="#"><img src="{{asset('images/Flag/flag-05.png')}}" alt="img-flaf" class="img-fluid me-2" style="width: 15px;height: 15px;min-width: 15px;"/>German</a></li>
-                  <li class="iq-sub-card list-group-item"><a class="p-0" href="#"><img src="{{asset('images/Flag/flag-06.png')}}" alt="img-flaf" class="img-fluid me-2" style="width: 15px;height: 15px;min-width: 15px;"/>Japanese</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
+
+        @if (auth()->check() && auth()->user()->user_type == "buyer")
+        <li class="nav-item">
+            
+            <a href="{{route('cart.view')}}"  class="nav-link position-relative">
+              
+              <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M14.1213 11.2331H16.8891C17.3088 11.2331 17.6386 10.8861 17.6386 10.4677C17.6386 10.0391 17.3088 9.70236 16.8891 9.70236H14.1213C13.7016 9.70236 13.3719 10.0391 13.3719 10.4677C13.3719 10.8861 13.7016 11.2331 14.1213 11.2331ZM20.1766 5.92749C20.7861 5.92749 21.1858 6.1418 21.5855 6.61123C21.9852 7.08067 22.0551 7.7542 21.9652 8.36549L21.0159 15.06C20.8361 16.3469 19.7569 17.2949 18.4879 17.2949H7.58639C6.25742 17.2949 5.15828 16.255 5.04837 14.908L4.12908 3.7834L2.62026 3.51807C2.22057 3.44664 1.94079 3.04864 2.01073 2.64043C2.08068 2.22305 2.47038 1.94649 2.88006 2.00874L5.2632 2.3751C5.60293 2.43735 5.85274 2.72207 5.88272 3.06905L6.07257 5.35499C6.10254 5.68257 6.36234 5.92749 6.68209 5.92749H20.1766ZM7.42631 18.9079C6.58697 18.9079 5.9075 19.6018 5.9075 20.459C5.9075 21.3061 6.58697 22 7.42631 22C8.25567 22 8.93514 21.3061 8.93514 20.459C8.93514 19.6018 8.25567 18.9079 7.42631 18.9079ZM18.6676 18.9079C17.8282 18.9079 17.1487 19.6018 17.1487 20.459C17.1487 21.3061 17.8282 22 18.6676 22C19.4969 22 20.1764 21.3061 20.1764 20.459C20.1764 19.6018 19.4969 18.9079 18.6676 18.9079Z" fill="currentColor"></path>
+              </svg>                        
+              @if ($cart->badge() > 0)
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style = "margin-top: 10px">
+                  {{$cart->badge()}}
+              </span>
+              @endif
+            </a>
+
         </li>
+        @endif
         <li class="nav-item dropdown">
           <a href="#"  class="nav-link" id="notification-drop" data-bs-toggle="dropdown" >
             <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -65,141 +69,40 @@
                 </div>
               </div>
               <div class="card-body p-0">
-                <a href="#" class="iq-sub-card">
-                  <div class="d-flex align-items-center">
-                    <img class="avatar-40 rounded-pill bg-soft-primary p-1" src="{{asset('images/shapes/01.png')}}" alt="">
-                    <div class="ms-3 w-100">
-                      <h6 class="mb-0 ">Emma Watson Bni</h6>
-                      <div class="d-flex justify-content-between align-items-center">
-                        <p class="mb-0">95 MB</p>
-                        <small class="float-right font-size-12">Just Now</small>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-                <a href="#" class="iq-sub-card">
-                  <div class="d-flex align-items-center">
-                    <div class="">
-                      <img class="avatar-40 rounded-pill bg-soft-primary p-1" src="{{asset('images/shapes/02.png')}}" alt="">
-                    </div>
-                    <div class="ms-3 w-100">
-                      <h6 class="mb-0 ">New customer is join</h6>
-                      <div class="d-flex justify-content-between align-items-center">
-                        <p class="mb-0">Cyst Bni</p>
-                        <small class="float-right font-size-12">5 days ago</small>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-                <a href="#" class="iq-sub-card">
-                  <div class="d-flex align-items-center">
-                    <img class="avatar-40 rounded-pill bg-soft-primary p-1" src="{{asset('images/shapes/03.png')}}" alt="">
-                    <div class="ms-3 w-100">
-                      <h6 class="mb-0 ">Two customer is left</h6>
-                      <div class="d-flex justify-content-between align-items-center">
-                        <p class="mb-0">Cyst Bni</p>
-                        <small class="float-right font-size-12">2 days ago</small>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-                <a href="#" class="iq-sub-card">
-                  <div class="d-flex align-items-center">
-                    <img class="avatar-40 rounded-pill bg-soft-primary p-1" src="{{asset('images/shapes/04.png')}}" alt="">
-                    <div class="w-100 ms-3">
-                      <h6 class="mb-0 ">New Mail from Fenny</h6>
-                      <div class="d-flex justify-content-between align-items-center">
-                        <p class="mb-0">Cyst Bni</p>
-                        <small class="float-right font-size-12">3 days ago</small>
-                      </div>
-                    </div>
-                  </div>
-                </a>
+                
               </div>
             </div>
           </div>
         </li>
-        <li class="nav-item dropdown">
-          <a href="#" class="nav-link" id="mail-drop" data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+        <li class="nav-item">
+          <a href="/chatify" class="nav-link" id="mail-drop">
             <svg width="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path opacity="0.4" d="M22 15.94C22 18.73 19.76 20.99 16.97 21H16.96H7.05C4.27 21 2 18.75 2 15.96V15.95C2 15.95 2.006 11.524 2.014 9.298C2.015 8.88 2.495 8.646 2.822 8.906C5.198 10.791 9.447 14.228 9.5 14.273C10.21 14.842 11.11 15.163 12.03 15.163C12.95 15.163 13.85 14.842 14.56 14.262C14.613 14.227 18.767 10.893 21.179 8.977C21.507 8.716 21.989 8.95 21.99 9.367C22 11.576 22 15.94 22 15.94Z" fill="currentColor"></path>
               <path d="M21.4759 5.67351C20.6099 4.04151 18.9059 2.99951 17.0299 2.99951H7.04988C5.17388 2.99951 3.46988 4.04151 2.60388 5.67351C2.40988 6.03851 2.50188 6.49351 2.82488 6.75151L10.2499 12.6905C10.7699 13.1105 11.3999 13.3195 12.0299 13.3195C12.0339 13.3195 12.0369 13.3195 12.0399 13.3195C12.0429 13.3195 12.0469 13.3195 12.0499 13.3195C12.6799 13.3195 13.3099 13.1105 13.8299 12.6905L21.2549 6.75151C21.5779 6.49351 21.6699 6.03851 21.4759 5.67351Z" fill="currentColor"></path>
             </svg>
             <span class="bg-primary count-mail"></span>
           </a>
-          <div class="sub-drop dropdown-menu dropdown-menu-end p-0" aria-labelledby="mail-drop">
-            <div class="card shadow-none m-0">
-              <div class="card-header d-flex justify-content-between bg-primary py-3">
-                <div class="header-title">
-                  <h5 class="mb-0 text-white">All Message</h5>
-                </div>
-              </div>
-              <div class="card-body p-0 ">
-                <a href="#" class="iq-sub-card">
-                  <div class="d-flex  align-items-center">
-                    <div class="">
-                      <img class="avatar-40 rounded-pill bg-soft-primary p-1" src="{{asset('images/shapes/01.png')}}" alt="">
-                    </div>
-                    <div class=" w-100 ms-3">
-                      <h6 class="mb-0 ">Bni Emma Watson</h6>
-                      <small class="float-left font-size-12">13 Jun</small>
-                    </div>
-                  </div>
-                </a>
-                <a href="#" class="iq-sub-card">
-                  <div class="d-flex align-items-center">
-                    <div class="">
-                      <img class="avatar-40 rounded-pill bg-soft-primary p-1" src="{{asset('images/shapes/02.png')}}" alt="">
-                    </div>
-                    <div class="ms-3">
-                      <h6 class="mb-0 ">Lorem Ipsum Watson</h6>
-                      <small class="float-left font-size-12">20 Apr</small>
-                    </div>
-                  </div>
-                </a>
-                <a href="#" class="iq-sub-card">
-                  <div class="d-flex align-items-center">
-                    <div class="">
-                      <img class="avatar-40 rounded-pill bg-soft-primary p-1" src="{{asset('images/shapes/03.png')}}" alt="">
-                    </div>
-                    <div class="ms-3">
-                      <h6 class="mb-0 ">Why do we use it?</h6>
-                      <small class="float-left font-size-12">30 Jun</small>
-                    </div>
-                  </div>
-                </a>
-                <a href="#" class="iq-sub-card">
-                  <div class="d-flex align-items-center">
-                    <div class="">
-                      <img class="avatar-40 rounded-pill bg-soft-primary p-1" src="{{asset('images/shapes/04.png')}}" alt="">
-                    </div>
-                    <div class="ms-3">
-                      <h6 class="mb-0 ">Variations Passages</h6>
-                      <small class="float-left font-size-12">12 Sep</small>
-                    </div>
-                  </div>
-                </a>
-                <a href="#" class="iq-sub-card">
-                  <div class="d-flex align-items-center">
-                    <div class="">
-                      <img class="avatar-40 rounded-pill bg-soft-primary p-1" src="{{asset('images/shapes/05.png')}}" alt="">
-                    </div>
-                    <div class="ms-3">
-                      <h6 class="mb-0 ">Lorem Ipsum generators</h6>
-                      <small class="float-left font-size-12">5 Dec</small>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
+  
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link py-0 d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="{{asset('client-images/profile/photo/'.auth()->user()->profile_picture)}}" alt="User-Profile" class="theme-color-default-img img-fluid avatar avatar-50 avatar-rounded">
+            @if (auth()->check())
+            <img src="{{asset('storage/images/client/photo/'.auth()->user()->userProfile->profile_picture)}}" alt="User-Profile" class="theme-color-default-img img-fluid avatar avatar-50 avatar-rounded">
+            @endif
+          
             <div class="caption ms-3 d-none d-md-block ">
-              <h6 class="mb-0 caption-title">{{ auth()->user()->userProfile->first_name ?? 'Guest'  }}</h6>
-              <p class="mb-0 caption-sub-title text-capitalize">Student</p>
+              <h6 class="mb-0 caption-title">
+                @if (auth()->check())
+                  {{ auth()->user()->userProfile->first_name ?? 'Guest'  }}
+                @else
+                  <a class = "nav-link text-warning" href = "{{route('auth.signin')}}">SignIn</a>
+                @endif
+                
+              </h6>
+
+              @if (auth()->check())
+              <p class="mb-0 caption-sub-title text-capitalize">{{ (auth()->user()->user_type ?? 'Guest')}}</p>
+              @endif
             </div>
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
