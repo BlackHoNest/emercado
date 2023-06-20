@@ -9,9 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
-use App\Models\Seller;
-use App\Models\Buyer;
-use App\Models\Farm;
+use App\Models\Admin;
+use App\Models\User;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -58,25 +57,11 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        switch(true) {
+        $obj = new AuthenticatedSessionController;
 
-            case auth()->user()->user_type == 'seller':
+        if(Auth::user()->user_type == 'provincial' || Auth::user()->user_type == 'municipal') { 
 
-                $seller = Seller::join('farms', 'farms.seller_id', '=', 'sellers.id')
-                
-                ->where(['sellers.id' => auth()->user()->account_id])->get();
-
-                $request->session()->put('seller', $seller);
-
-                break;
-            
-            case auth()->user()->user_type == 'buyer':
-
-                $buyer = Buyer::where(['id' => auth()->user()->account_id])->get();
-
-                $request->session()->put('buyer', $buyer);
-
-                break;
+            $request->session()->put('admin', Admin::where(['account_id' => Auth::user()->account_id])->get());
 
         }
 

@@ -10,7 +10,7 @@ class Seller extends Model
 
     protected $table = "sellers";
     protected $fillable = [
-        'id',
+        'seller_id',
         'last_name',
         'first_name',
         'middle_name',
@@ -28,7 +28,8 @@ class Seller extends Model
         'password',
         'idnumber',
         'idphoto',
-        'profile_picture'
+        'profile_picture',
+        'status'
     ];
 
     protected $hidden = [

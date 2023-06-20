@@ -26,13 +26,13 @@ class GlobalList extends Controller
 		$out = [];
 
 		if (!empty($id )){
-			$out = FarmTypeSub::where("farmtypeid", $id)->orderby("description", "ASC")->get();
+			$out = FarmTypeSub::where("farmtypeid", $id)->orderby("product_description", "ASC")->get();
 		}
 		
 		if ($request->ajax()){
 			$tmp = [];
 			foreach($out as $o){
-				array_push($tmp, ["ID" => $this->aes->encrypt($o->id), "Description" => $o->description, "Slug" => \Str::Slug($o->description)]);
+				array_push($tmp, ["ID" => $this->aes->encrypt($o->id), "Description" => $o->product_description, "Slug" => \Str::Slug($o->product_description)]);
 			}
 
 			return response()->json($tmp);

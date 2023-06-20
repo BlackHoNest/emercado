@@ -1,9 +1,13 @@
 <?php
 
 // Controllers
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GuestController;
+use App\Http\Controllers\BuyerController;
+use App\Http\Controllers\VerifyController;
+use App\Http\Controllers\DeleteController;
 use App\Http\Controllers\GlobalList;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ImageController;
@@ -44,18 +48,59 @@ Route::group(['prefix' => 'share'], function() {
 });
 
 //UI Pages Routs
+
+Route::get('/', [HomeController::class, 'guest']);
+Route::get('/dashboard', [HomeController::class, 'provincialadmin'])->name('dashboard.province');
+
+
 Route::get('/', [HomeController::class, 'guest'])->name('guesthome');
 Route::post('/modal-login', [AuthenticatedSessionController::class, 'modallogin']);
+
 //registration
 Route::group(['prefix' => 'register'], function() {
-    Route::get('buyer', [GuestController::class, 'buyer'])->name('buyer.signup');
+    Route::get('buyer', [BuyerController::class, 'buyer'])->name('buyer.signup');
     Route::get('seller', [GuestController::class, 'seller'])->name('seller.signup');
     Route::post('storeseller', [GuestController::class, 'storeseller'])->name('seller.store');
-    
+    Route::post('storebuyer', [BuyerController::class, 'storebuyer'])->name('buyer.store');
+
+    Route::post('createadmin', [AdminController::class, 'createadmin']);
+    Route::post('createfarm', [AdminController::class, 'createfarm']);
+    Route::post('createfarmproduct', [AdminController::class, 'createfarmproduct']);
+    Route::post('createaid', [AdminController::class, 'createaid']);
+
+    Route::post('updateadmin', [AdminController::class, 'updateadmin']);
+    Route::post('updatefarm', [AdminController::class, 'updatefarm']);
+    Route::post('updatefarmproduct', [AdminController::class, 'updatefarmproduct']);
+    Route::post('updateaid', [AdminController::class, 'updateaid']);
 });
 
+Route::group(['prefix' => 'delete'], function() {
+    Route::post('deleteadmin', [DeleteController::class, 'deleteadmin']);
+    Route::post('deletefarm', [DeleteController::class, 'deletefarm']);
+    Route::post('deleteproduct', [DeleteController::class, 'deleteproduct']);
+    Route::post('deleteaid', [DeleteController::class, 'deleteaid']);
+    Route::post('deletebuyer', [DeleteController::class, 'deletebuyer']);
+    Route::post('deleteseller', [DeleteController::class, 'deleteseller']);
+});
+
+
+//Admins
+Route::group(['prefix' => 'admin'], function() {
+    Route::get('/municipaladmins',[HomeController::class, 'municipaladmins'])->name('municipal.admin');
+    Route::get('/verifiedsellers',[HomeController::class, 'verifiedsellers'])->name('verified.sellers');
+    Route::get('/viewseller',[HomeController::class, 'viewseller'])->name('view.seller');
+    Route::get('/pendingseller',[HomeController::class, 'pendingseller'])->name('pending.seller');
+    Route::get('/pendingsellers',[HomeController::class, 'pendingsellers'])->name('pending.sellers');
+    Route::get('/buyers',[HomeController::class, 'buyers'])->name('admin.buyer');
+    Route::get('/viewbuyer',[HomeController::class, 'viewbuyer'])->name('view.buyer');
+
+    Route::get('/farmtype',[HomeController::class, 'farmtype'])->name('farm.type');
+    Route::get('/farmproduct',[HomeController::class, 'farmproduct'])->name('farm.product');
+    Route::get('/farmaid',[HomeController::class, 'farmaid'])->name('farm.aid');
+});
 Route::group(['prefix' => 'view'], function() {
     Route::get('product/{id}', [GuestController::class, 'view'])->name('public.view');
+
 });
 
 //Lists
@@ -65,8 +110,17 @@ Route::group(['prefix' => 'list'], function() {
     Route::post('/farmtypesub',[GlobalList::class, 'farmtypesub']);
 });
 
+//Verify
+Route::group(['prefix' => 'verify'], function() {
+    Route::post('/username',[VerifyController::class, 'verifyusername']);
+    Route::post('/password',[VerifyController::class, 'verifypassword']);
+
+    Route::post('/approveseller',[VerifyController::class, 'approveseller'])->name('approve.seller');
+});
+
 //Auth pages Routs
 Route::group(['prefix' => 'auth'], function() {
+    Route::get('provincial', [HomeController::class, 'provincial'])->name('auth.superadmin');
     Route::get('signin', [HomeController::class, 'signin'])->name('auth.signin');
     Route::get('confirmmail', [HomeController::class, 'confirmmail'])->name('auth.confirmmail');
     Route::get('lockscreen', [HomeController::class, 'lockscreen'])->name('auth.lockscreen');

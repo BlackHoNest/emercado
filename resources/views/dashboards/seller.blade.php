@@ -5,6 +5,7 @@
             $final = 0;
             $total = 0;
 
+
             $confirmed = 0;
             $unprocess = 0;
             $totalOrders = 0;
@@ -44,7 +45,7 @@
                <div class="card-body">
                   <div class="progress-widget">
                      <div id="circle-progress-02" class="circle-progress-01 circle-progress circle-progress-info text-center" data-min-value="0" data-max-value="{{$total}}" data-value="{{$final}}" data-type="percent">
-                        
+                     
                      </div>
                      <div class="progress-detail">
                         <p  class="mb-2">POSTED</p>
@@ -295,8 +296,10 @@
                      <div class=" d-flex profile-media align-items-top mb-2">
                         <div class="profile-dots-pills border-primary mt-1"></div>
                         <div class="ms-4">
+
                            <h6 class=" mb-1">{{$log->headertitle}}</h6>
                            <span class="mb-0">{{$log->created_at}}</span>
+
                         </div>
                      </div>
                      @endforeach

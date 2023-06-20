@@ -18,7 +18,12 @@ use App\Models\Aid;
 use App\Models\Seller;
 use App\Models\Farm;
 use App\Models\User;
+use App\Models\Admin;
+use App\Models\Farmer_farmtype;
+use App\Models\Aid_received;
+
 use App\Models\PostProduct;
+
 
 class GuestController extends Controller
 {
@@ -39,13 +44,15 @@ class GuestController extends Controller
         return view('guest.seller', compact('Municipalties','farmTypes','aids'));
     }
 
-    public function buyer(Request $request)
-    {
-        return view('guest.buyer');
-    }
-
     public function storeseller(Request $request)
     {
+
+        foreach(User::where(['username' => $request->username])->get() as $verify) {
+            if($verify->username == $request->username) {
+                $error = 'Username is already taken.';
+                return redirect()->route('seller.signup')->withErrors(['errors' => $error])->withInput($request->all());
+            }
+        }
 
         // dd($request->all());
         $request->validate([
@@ -78,6 +85,10 @@ class GuestController extends Controller
         
         
         $msg = "";
+
+        if (strlen($request->password) < 8){
+            $msg .= "Password must be 8 characters or more." .", ";
+        }
 
         if (strlen($request->contact_number) != 11){
             $msg .= "Contact number must be 11 digit." .", ";
@@ -126,18 +137,19 @@ class GuestController extends Controller
                 $id = $this->aes->decrypt($ftype);
                 $exTypeSubs = FarmTypeSub::where("farmtypeid", $id)->get();
                 foreach($exTypeSubs as $sub){
-                    $name = \Str::slug($sub->description);
+                    $name = \Str::slug($sub->product_description);
                     if (isset($request->$name)){
                         $naa = true;
                         $gross = $name."-harvest_gross";
                         $net = $name."-harvest_net";
                         // dd($request->$gross);
-                        if (empty($request->$name."-harvest_gross")){
-                            $msg .= "Please select estimated yield per havest (gross) of product " .$sub->description .", ";
+                        if (empty($request->$gross)){
+                            $msg .= "Please select estimated yield per havest (gross) of product " .$sub->product_description .", ";
                         }
                         if (empty($request->$net)){
-                            $msg .= "Please select estimated yield per havest (net) of product " .$sub->description .", ";
+                            $msg .= "Please select estimated yield per havest (net) of product " .$sub->product_description .", ";
                         }
+                        
                     }
                 }
                 
@@ -153,9 +165,10 @@ class GuestController extends Controller
             return redirect()->route('seller.signup')->withErrors(['errors' => $msg])->withInput($request->all());
         }
 
+        $datetime = date('Ymd-His');
 
-        $validIDName = \Str::slug($request->username).'.'.$request->valid_ID->extension();  
-        $profilepictureName = \Str::slug($request->username).'.'.$request->profile_photo->extension(); 
+        $validIDName = \Str::slug($request->username.'-'.$datetime).'.'.$request->valid_ID->extension();  
+        $profilepictureName = \Str::slug($request->username.'-'.$datetime).'.'.$request->profile_photo->extension(); 
 
         $transferid = $request->file('valid_ID')->storeAs('public/images/client/id', $validIDName);
         $transferphoto = $request->file('profile_photo')->storeAs('public/images/client/photo', $profilepictureName);
@@ -177,7 +190,7 @@ class GuestController extends Controller
             'idnumber' => $request->idnumber,
             'idphoto' => $validIDName,
             'profile_picture' => $profilepictureName,
-            'status' => 0
+            'status' => 'Pending'
         ]);
 
         Farm::create([
@@ -191,15 +204,34 @@ class GuestController extends Controller
             'beneficiary_specify' => $request->beneficiary,
         ]);
 
-            // 'farm_type' => $request->crops.' '.$request->livestocks.' '.$request->vegetables.' '.$request->products,
-            // 'farm_crops' => $request->crop1.' '.$request->crop2.' '.$request->crop3.' '.$request->crop4,
-            // 'farm_livestocks' => $request->livestock1.' '.$request->livestock2.' '.$request->livestock3.' '.$request->livestock4,
-            // 'farm_vegetables' => $request->vegetable1.' '.$request->vegetable2.' '.$request->vegetable3.' '.$request->vegetable4,
-            // 'farm_products' => $request->product1.' '.$request->product2.' '.$request->product3.' '.$request->product4,
-            // 'gross_harvest' => $request->harvest_gross,
-            // 'net_harvest' => $request->harvest_net,
-            
-            
+        foreach($request->FarmType as $ftype){
+            $id = $this->aes->decrypt($ftype);
+            $exTypeSubs = FarmTypeSub::where("farmtypeid", $id)->get();
+            foreach($exTypeSubs as $sub){
+                $name = \Str::slug($sub->product_description);
+                $gross = $name."-harvest_gross";
+                $net = $name."-harvest_net";
+                if (isset($request->$name)){
+                    Farmer_farmtype::create([
+                        'seller_id' => $saveseller->id,
+                        'farmid' => $id,
+                        'farmsubid' => $sub->id,
+                        'grossyield' => $request->$gross,
+                        'netyield' => $request->$net,
+                    ]);
+                }
+            }
+        }
+
+        if (isset($request->aidreceived)){
+            foreach($request->aidreceived as $key => $value) {
+                $id = $this->aes->decrypt($value);
+                Aid_received::create([
+                    'seller_id' => $saveseller->id,
+                    'aid_id' => $id,
+                ]);
+            }
+        }   
 
         Auth::login($user = User::create([
             'account_id' => $saveseller->id,
@@ -215,6 +247,7 @@ class GuestController extends Controller
         return redirect(RouteServiceProvider::HOME);
 
     }
+
 
     public function view(Request $request){
 
