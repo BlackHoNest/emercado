@@ -61,22 +61,7 @@ INSERT INTO `admin` (`id`, `account_id`, `municipal`, `province`, `created_at`, 
 -- Table structure for table `aid`
 --
 
-CREATE TABLE `aid` (
-  `id` int(11) NOT NULL,
-  `AidName` varchar(150) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `aid`
---
-
-INSERT INTO `aid` (`id`, `AidName`, `created_at`, `deleted_at`, `updated_at`) VALUES
-(1, 'Fertilizer', NULL, NULL, '2023-06-14 17:32:11'),
-(2, 'Seedlings', NULL, NULL, '2023-06-13 18:32:06'),
-(3, 'Feeds', NULL, NULL, '2023-06-14 16:38:05');
 
 -- --------------------------------------------------------
 
